@@ -15,7 +15,7 @@ from horseracelib.utility import HorseResult, RaceCalendar, RaceInfo
 def main():
     """メイン関数."""
     p = ArgumentParser()
-    p.add_argument('-d', '--cachedb', default='cache.db')
+    p.add_argument('-d', '--cachedb', default='data/cache.db')
     p.add_argument('-c', '--course', default='門別')
     p.add_argument('start', type=int)
     p.add_argument('end', type=int)
