@@ -1,0 +1,3 @@
+[submodule "horseracelib"]
+	path = horseracelib
+	url = https://github.com/masaminh/horseracelib.git
