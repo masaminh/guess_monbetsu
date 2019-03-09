@@ -1,38 +1,27 @@
 """モデルの作成."""
 
-import csv
 from argparse import ArgumentParser
 
 import matplotlib.pyplot as plt
-import numpy
 from keras.layers import Dense, Dropout
 from keras.layers.normalization import BatchNormalization
 from keras.models import Sequential
 from keras.optimizers import Adam
 
+from utility import read_data
+
 
 def main():
     """メイン関数."""
-    p = ArgumentParser()
-    p.add_argument('traincsv')
-    p.add_argument('testcsv')
-    p.add_argument('outfile')
-    p.add_argument('-e', '--epochs', type=int, default=100)
-    args = p.parse_args()
+    parser = ArgumentParser()
+    parser.add_argument('traincsv')
+    parser.add_argument('testcsv')
+    parser.add_argument('outfile')
+    parser.add_argument('-e', '--epochs', type=int, default=100)
+    args = parser.parse_args()
 
-    def read_data(filename):
-        x = []
-        y = []
-
-        with open(filename, 'r') as f:
-            for r in csv.reader(f):
-                x.append([float(e) for e in r[1:-16]])
-                y.append([float(e) for e in r[-16:]])
-
-        return numpy.array(x), numpy.array(y)
-
-    X_train, Y_train = read_data(args.traincsv)
-    X_test, Y_test = read_data(args.testcsv)
+    x_train, y_train, _ = read_data(args.traincsv)
+    x_test, y_test, _ = read_data(args.testcsv)
 
     model = Sequential()
     model.add(Dense(1600, activation='relu', input_dim=1600))
@@ -50,17 +39,17 @@ def main():
                   optimizer=adam,
                   metrics=['accuracy'])
 
-    history = model.fit(X_train, Y_train, epochs=args.epochs,
-                        batch_size=50, validation_data=(X_test, Y_test)
+    history = model.fit(x_train, y_train, epochs=args.epochs,
+                        batch_size=50, validation_data=(x_test, y_test)
                         )
 
     _plot_history(history)
 
-    loss, accuracy = model.evaluate(X_test, Y_test, verbose=1)
+    loss, accuracy = model.evaluate(x_test, y_test, verbose=1)
     print("Accuracy = {:.2f}".format(accuracy))
     print("Loss = {:.2f}".format(loss))
 
-    model.save(args.outfile, include_optimizer=False)
+    model.save(args.outfile)
 
 
 def _plot_history(history):

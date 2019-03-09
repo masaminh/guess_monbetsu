@@ -127,14 +127,14 @@ class CachedAccess:
             get_day_races(url)
             for url in tqdm(urls)))
 
-    def read_race_results(self, urls: List[str]) -> List[Tuple[RaceInfo, HorseResult]]:
+    def read_race_results(self, urls: List[str]) -> List[Tuple[RaceInfo, List[HorseResult]]]:
         """レース結果を取得する.
 
         Arguments:
             urls {List[str]} -- [description]
 
         Returns:
-            List[Tuple[RaceInfo, HorseResult]] -- レース結果
+            List[Tuple[RaceInfo, List[HorseResult]]] -- レース結果
 
         """
         def get_race_results(url):
